@@ -13,11 +13,13 @@ module Frontend::ApplicationHelper
 
   # add where conditionals to filter private/hidden/expired/drafts/unpublished
   # note: only for post records
+  # hook fronted post list order error
+  # 2018/03/06 orichi
   def verify_front_visibility(active_record)
-    active_record = active_record.visible_frontend
-    r = {active_record: active_record}
-    hooks_run("filter_post", r)
-    r[:active_record]
+    active_record = active_record.visible_frontend.unscope(:order).order('created_at desc')
+    # r = {active_record: active_record}
+    # hooks_run("filter_post", r)
+    # r[:active_record]
   end
 
   # fix for url_to or url_path or any other who need add automatically current locale in the url
